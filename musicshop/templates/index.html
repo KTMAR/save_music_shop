@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div id="carouselExampleIndicators" class="carousel slide" data-interval='3000'
+             style="padding-top:20px;padding-bottom:40px;" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+
+                {% for g in gallery %}
+                    <div class="carousel-item {% if forloop.counter0 == 0 %} active {% endif %}">
+                        <img class="d-block w-100" style="width: 1920px;height: 700px" src="{{ g.image.url }}" alt="First slide">
+                    </div>
+                {% endfor %}
+
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="container">
+        <div class="row">
+            {% for a in album %}
+                <div class="card mx-4 mt-4" style="width: 24rem;margin-bottom: 10px; background-color: #dcdde1">
+                    <img src="{{ a.image.url }}" style="width: 375px;height: 260px" class="img-fluid rounded pt-2"
+                         alt="...">
+                    <div class="card-body">
+                        <a href="{{ a.get_absolute_url }}"><h4 class="card-title">{{ a.artist.name }}</h4></a>
+                        <p  class="card-text" style="max-width: 300px;"><strong>Album: {{ a.name }}</strong></p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="p-3 mb-2 bg-dark text-white rounded mybtn">Release:
+                            <strong>{{ a.release_date }}</strong></li>
+                        <li class="p-3 mb-2 bg-dark text-white rounded mybtn">Price : <strong>{{ a.price }}</strong>
+                        </li>
+                        <li class="p-3 mb-2 bg-dark text-white rounded mybtn">Genre :
+                            <strong>{{ a.artist.genre }}</strong></li>
+                        <li class="p-3 mb-2 bg-dark text-white rounded mybtn">Stock : <strong>{{ a.stock }}</strong>
+                        </li>
+                    </ul>
+                    <div class="card-body">
+                        {% if request.user.is_authenticated %}
+                            <audio controls>
+                                <source src="{{ MEDIA_URL }}{{ a.track }}" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        {% else %}
+                            <strong>Что бы прослушать демо, <a href="{% url 'login' %}">авторизуйся</a></strong>
+                        {% endif %}
+                        <hr>
+                        <a href="">
+                            <button class="btn btn-danger" style="margin-left: 152px" >Добавить в корзину</button>
+                        </a>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock content %}
